@@ -21,16 +21,6 @@ public class Test : MonoBehaviourPunCallbacks
         // PhotonNetwork.JoinLobby();
     }
 
-
-    // void OnGUI()
-    // {
-    //     //ログインの状態を画面上に出力
-    //     GUILayout.Label(PhotonNetwork.NetworkClientState.ToString() + "\r\n" +
-    //        PhotonNetwork.LocalPlayer.ActorNumber + "\r\n" +
-    //        PhotonNetwork.LocalPlayer.IsMasterClient + "\r\n" 
-    //        );
-    // }
-
     //ルームに入室後に呼び出される
     public override void OnJoinedRoom()
     {
@@ -51,7 +41,6 @@ public class Test : MonoBehaviourPunCallbacks
 
         //プレイヤーを生成
         PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
-
     }
 
     // Update is called once per frame

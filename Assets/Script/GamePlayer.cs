@@ -10,9 +10,15 @@ public class GamePlayer : MonoBehaviourPunCallbacks, IPunObservable
     // シングルトンの生成
     public static GamePlayer Instance;
 
+    // 位置情報(他プレイヤーの位置情報として)
     private Vector3 receivePosition = Vector3.zero;
+    // 画面の左下の座標
+    private Vector3 screen_LeftBottom = Vector3.zero;
+    // 画面の右上の座標
+    private Vector3 screen_RightTop = Vector3.zero;
 
-    private float speed = 0.1f;
+    // 移動スピード
+    private float speed = 0.075f;
 
     void Start()
     {
@@ -23,6 +29,12 @@ public class GamePlayer : MonoBehaviourPunCallbacks, IPunObservable
                 Instance = this;
             }
         }
+
+        // 画面の左下の座標を取得 
+        screen_LeftBottom = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        // 画面の右上の座標を取得 
+        screen_RightTop = Camera.main.ScreenToWorldPoint(
+            new Vector3(Screen.width, Screen.height, 0));
 
     }
     void OnGUI()
@@ -43,26 +55,61 @@ public class GamePlayer : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (photonView.IsMine)
         {
-            if (Input.GetKey("up")) {
-                transform.position += transform.up * speed;
+            Vector3 oldPos = transform.position;
+            if (Input.GetKey("up"))
+            {
+                transform.position += Vector3.up * speed;
             }
-            if (Input.GetKey("down")) {
-                transform.position -= transform.up * speed;
+            if (Input.GetKey("down"))
+            {
+                transform.position -= Vector3.up * speed;
             }
-            if (Input.GetKey("right")) {
-                transform.position += transform.right * speed;
+            if (Input.GetKey("right"))
+            {
+                transform.position += Vector3.right * speed;
             }
-            if (Input.GetKey ("left")) {
-                transform.position -= transform.right * speed;
+            if (Input.GetKey ("left"))
+            {
+                transform.position -= Vector3.right * speed;
+            }
+            if (Input.GetKeyDown (KeyCode.A))
+            {
+                Debug.Log(transform.position.x +"\r\n"+
+                "screen_LeftBottom"+screen_LeftBottom +"\r\n" +
+                "screen_RightTop"+screen_RightTop +"\r\n" );
+            }
+
+            //左側制限
+            if(transform.position.x < screen_LeftBottom.x)
+            {
+                oldPos.x = screen_LeftBottom.x;
+                transform.position = oldPos;
+            }
+            //下側制限
+            if(transform.position.y < screen_LeftBottom.y)
+            {
+                oldPos.y = screen_LeftBottom.y;
+                transform.position = oldPos;
+            }
+            //右側制限
+            if(screen_RightTop.x < transform.position.x)
+            {
+                oldPos.x = screen_RightTop.x;
+                transform.position = oldPos;
+            }
+            //上側制限
+            if(screen_RightTop.y < transform.position.y)
+            {
+                oldPos.y = screen_RightTop.y;
+                transform.position = oldPos;
             }
         }
         else
         {
-        // //自分以外のプレイヤーの補正
-            // transform.position = receivePosition;
+            //自分以外のプレイヤーの補正
             transform.position = Vector3.Lerp(transform.position, receivePosition, Time.deltaTime );
-        //     transform.rotation = Quaternion.Lerp(transform.rotation, receiveRotation, Time.deltaTime * 10);
-        //     rigidbody2D.velocity = Vector2.Lerp(rigidbody2D.velocity, receiveVelocity, Time.deltaTime * 10);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, receiveRotation, Time.deltaTime * 10);
+            //rigidbody2D.velocity = Vector2.Lerp(rigidbody2D.velocity, receiveVelocity, Time.deltaTime * 10);
         }
         
 
@@ -91,13 +138,13 @@ public class GamePlayer : MonoBehaviourPunCallbacks, IPunObservable
         this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log("TekiTekiTekiTekiTeki");
-        if (other.gameObject.CompareTag("Teki"))
-        {
-            other.gameObject.SetActive(false);
-        }
-    }
+    // private void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     Debug.Log("TekiTekiTekiTekiTeki");
+    //     if (other.gameObject.CompareTag("Teki"))
+    //     {
+    //         other.gameObject.SetActive(false);
+    //     }
+    // }
    
 }
