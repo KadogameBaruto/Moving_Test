@@ -56,19 +56,19 @@ public class GamePlayer : MonoBehaviourPunCallbacks, IPunObservable
         if (photonView.IsMine)
         {
             Vector3 oldPos = transform.position;
-            if (Input.GetKey("up"))
+            if (Input.GetKey("up") || Input.GetKey(KeyCode.W))
             {
                 transform.position += Vector3.up * speed;
             }
-            if (Input.GetKey("down"))
+            if (Input.GetKey("down") || Input.GetKey(KeyCode.S))
             {
                 transform.position -= Vector3.up * speed;
             }
-            if (Input.GetKey("right"))
+            if (Input.GetKey("right") || Input.GetKey(KeyCode.D))
             {
                 transform.position += Vector3.right * speed;
             }
-            if (Input.GetKey ("left"))
+            if (Input.GetKey ("left") || Input.GetKey(KeyCode.A))
             {
                 transform.position -= Vector3.right * speed;
             }
