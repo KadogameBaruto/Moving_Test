@@ -10,8 +10,8 @@ public class Test : MonoBehaviourPunCallbacks
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
-
     }
+    
 
     //ルームに入室前に呼び出される
     public override void OnConnectedToMaster()
@@ -24,21 +24,6 @@ public class Test : MonoBehaviourPunCallbacks
     //ルームに入室後に呼び出される
     public override void OnJoinedRoom()
     {
-        //if(PhotonNetwork.LocalPlayer.IsMasterClient)
-        //{
-        //    System.Random r = new System.Random();
-        //    Vector3 spawnPosition = new Vector3(r.Next(0, 400), r.Next(0, 400), 0); //生成位置
-
-        //    GameObject image = PhotonNetwork.Instantiate("MyImage", spawnPosition, Quaternion.identity, 0);
-        //}
-
-        // if (PhotonNetwork.IsMasterClient)
-        // {
-        //     var hashTable = new ExitGames.Client.Photon.Hashtable();
-        //     hashTable["TurnPlayerID"] = PhotonNetwork.LocalPlayer.ActorNumber;
-        //     PhotonNetwork.CurrentRoom.SetCustomProperties(hashTable);
-        // }
-
         //プレイヤーを生成
         PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
     }
@@ -48,4 +33,11 @@ public class Test : MonoBehaviourPunCallbacks
     {
         
     }
+    // 属性の設定
+[RuntimeInitializeOnLoadMethod]
+static void OnRuntimeMethodLoad() {
+Debug.Log("After Scene is loaded and game is running");
+// スクリーンサイズの指定
+Screen.SetResolution(1024, 768, false);
+}
 }
